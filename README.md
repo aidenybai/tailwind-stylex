@@ -72,18 +72,6 @@ const styles = stylex.create({
 
 Your editor autocompletes every token and shows its exact value.
 
-## Update Tailwind
-
-Update Tailwind and regenerate the published tokens:
-
-```shell
-cd packages/tailwind-stylex
-ni -D tailwindcss@latest
-nr generate
-```
-
-Commit the generated token files with the Tailwind update. CI verifies that they stay in sync.
-
 ## License
 
 MIT
