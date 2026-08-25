@@ -1,0 +1,24 @@
+{
+  "name": "@aidenybai/stylex-tailwind-monorepo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vp run @aidenybai/stylex-tailwind#build",
+    "changeset": "nr build && changeset",
+    "check": "vp check",
+    "dev": "vp run @aidenybai/stylex-tailwind#dev",
+    "format": "vp fmt",
+    "lint": "vp lint",
+    "publint": "vp run @aidenybai/stylex-tailwind#publint",
+    "release": "changeset publish",
+    "test": "vp test",
+    "version": "changeset version"
+  },
+  "devDependencies": {
+    "@antfu/ni": "^30.5.0",
+    "@changesets/changelog-git": "^0.2.0",
+    "@changesets/cli": "^2.30.0",
+    "vite-plus": "^0.2.9"
+  },
+  "packageManager": "pnpm@11.20.0"
+}

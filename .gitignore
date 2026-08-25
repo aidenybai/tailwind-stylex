@@ -1,0 +1,10 @@
+node_modules
+.DS_Store
+.env
+dist
+coverage
+*.tgz
+*.tsbuildinfo
+
+packages/stylex-tailwind/README.md
+packages/stylex-tailwind/LICENSE
