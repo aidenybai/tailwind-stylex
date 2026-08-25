@@ -6,5 +6,5 @@ coverage
 *.tgz
 *.tsbuildinfo
 
-packages/stylex-tailwind/README.md
-packages/stylex-tailwind/LICENSE
+packages/tailwind-stylex/README.md
+packages/tailwind-stylex/LICENSE

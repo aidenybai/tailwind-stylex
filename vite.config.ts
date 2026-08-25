@@ -5,9 +5,13 @@ export default defineConfig({
     "*.{js,ts,tsx}": "vp check --fix",
   },
   test: {
-    projects: ["packages/stylex-tailwind/vite.config.ts"],
+    projects: ["packages/tailwind-stylex/vite.config.ts"],
   },
   fmt: {
+    ignorePatterns: [
+      "packages/tailwind-stylex/tokens.stylex.d.ts",
+      "packages/tailwind-stylex/tokens.stylex.js",
+    ],
     semi: true,
     singleQuote: false,
   },

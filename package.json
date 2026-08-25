@@ -1,15 +1,14 @@
 {
-  "name": "stylex-tailwind-monorepo",
+  "name": "tailwind-stylex-monorepo",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vp run stylex-tailwind#build",
+    "build": "vp run tailwind-stylex#build",
     "changeset": "nr build && changeset",
     "check": "vp check",
-    "dev": "vp run stylex-tailwind#dev",
     "format": "vp fmt",
     "lint": "vp lint",
-    "publint": "vp run stylex-tailwind#publint",
+    "publint": "vp run tailwind-stylex#publint",
     "release": "changeset publish",
     "test": "vp test",
     "version": "changeset version"

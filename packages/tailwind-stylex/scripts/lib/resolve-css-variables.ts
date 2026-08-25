@@ -31,8 +31,6 @@ export const resolveCssVariables = (
       replacement = resolveCssVariables(variableValue, variables, nextResolvingVariables);
     } else if (fallback !== undefined) {
       replacement = resolveCssVariables(fallback, variables, resolvingVariables);
-    } else if (variableName.startsWith("--tw-")) {
-      return undefined;
     } else {
       replacement = value.slice(variableIndex, closingIndex + 1);
     }

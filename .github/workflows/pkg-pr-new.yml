@@ -22,4 +22,4 @@ jobs:
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpx pkg-pr-new publish --compact ./packages/stylex-tailwind
+      - run: pnpx pkg-pr-new publish --compact ./packages/tailwind-stylex

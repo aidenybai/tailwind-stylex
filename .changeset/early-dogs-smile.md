@@ -1,5 +1,5 @@
 ---
-"stylex-tailwind": minor
+"tailwind-stylex": minor
 ---
 
-Create the Tailwind CSS to StyleX compiler bridge.
+Publish Tailwind’s default design tokens as generated StyleX constants.

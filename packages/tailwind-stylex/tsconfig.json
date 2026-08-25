@@ -10,6 +10,6 @@
     "strict": true,
     "types": ["node"]
   },
-  "include": ["src", "tests", "vite.config.ts"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["scripts", "tests", "vite.config.ts"],
+  "exclude": ["node_modules"]
 }

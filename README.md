@@ -1,80 +1,88 @@
-# stylex-tailwind
+# tailwind-stylex
 
-A compile-time bridge from Tailwind CSS to StyleX.
+Tailwind CSS design tokens for StyleX, generated directly from Tailwind’s default theme.
 
-`stylex-tailwind` reads Tailwind’s installed design system, scans your source for the utilities you use, and generates a static `.stylex.ts` module. Tailwind remains the source of truth for tokens and utility behavior.
+`tailwind-stylex` parses the installed `tailwindcss/theme.css` with Lightning CSS once when this package updates. It publishes the resulting static StyleX constants. Your app does not need a package-specific config file, scanner, Tailwind compiler, or generation step.
 
 ## Install
 
 ```shell
-pnpm add -D stylex-tailwind tailwindcss
-pnpm add @stylexjs/stylex
+pnpm add tailwind-stylex @stylexjs/stylex
 ```
-
-## Configure
-
-Create `stylex-tailwind.config.ts`:
-
-```typescript
-import { defineConfig } from "stylex-tailwind";
-
-export default defineConfig({
-  content: ["src/**/*.{ts,tsx}"],
-  input: "src/app/theme.css",
-  output: "src/styles/tailwind.stylex.ts",
-});
-```
-
-Your Tailwind entry can use the standard Tailwind theme:
-
-```css
-@import "tailwindcss/theme.css";
-@tailwind utilities;
-
-@theme {
-  --color-brand-500: oklch(62% 0.2 250);
-}
-```
-
-Generate the StyleX module:
-
-```shell
-stylex-tailwind generate
-```
-
-Add the command before your build and type-check scripts.
 
 ## Use
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";
-
-import { color, tw } from "@/styles/tailwind.stylex";
-
-const Card = () => (
-  <article {...stylex.props(tw.flex, tw.itemsCenter, tw.gap4, tw.p4, tw.roundedLg)}>
-    <span {...stylex.props(tw.textSm, tw.fontMedium, tw.textBrand500)}>Hello</span>
-  </article>
-);
+import { colors, radii, spacing } from "tailwind-stylex/tokens.stylex";
 
 const styles = stylex.create({
-  custom: {
-    backgroundColor: color.brand500,
+  card: {
+    backgroundColor: colors.stone100,
+    borderRadius: radii.lg,
+    color: colors.stone900,
+    padding: spacing[4],
   },
 });
 ```
 
-Use `stylex-tailwind generate --check` in CI to verify that generated output is current.
+The package exports:
 
-## How It Works
+- `colors`
+- `spacing`
+- `breakpoints`
+- `containers`
+- `fonts`
+- `fontSizes`
+- `fontSizeLineHeights`
+- `fontWeights`
+- `letterSpacing`
+- `lineHeights`
+- `radii`
+- `shadows`
+- `insetShadows`
+- `dropShadows`
+- `textShadows`
+- `easings`
+- `animations`
+- `blurs`
+- `perspectives`
+- `aspectRatios`
+- `defaults`
+- `maxWidths`
 
-1. Tailwind exposes its theme and utility candidates through its compiler API.
-2. The scanner maps `tw.camelCasedName` access back to the matching Tailwind class.
-3. Tailwind compiles each used candidate.
-4. The bridge resolves Tailwind’s internal custom properties and emits StyleX declarations.
-5. StyleX performs its normal static extraction during your application build.
+Token names follow Tailwind. Numeric names use bracket notation, such as `spacing[4]`, `breakpoints["2xl"]`, and `fontSizes["2xl"]`.
 
-The generator emits only utilities referenced by your source or listed in `safelist`. It skips selectors and behaviors that StyleX cannot represent as a local style object.
+## StyleX Setup
+
+Your StyleX compiler must process `tailwind-stylex` as a direct StyleX dependency. With `@stylexjs/unplugin`, add it to `externalPackages`:
+
+```typescript
+stylex({
+  externalPackages: ["tailwind-stylex"],
+});
+```
+
+`@stylexjs/postcss-plugin` discovers direct StyleX dependencies automatically. If you set a custom `include` list, include the generated module:
+
+```javascript
+{
+  include: [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "node_modules/tailwind-stylex/tokens.stylex.js",
+  ],
+}
+```
+
+## Updating Tailwind
+
+Only package maintainers run:
+
+```shell
+nr generate
+```
+
+CI runs `nr build` to verify that the committed tokens match the installed Tailwind version.
 
 ## License
 
