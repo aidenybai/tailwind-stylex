@@ -1,0 +1,13 @@
+@layer reset, base, stylex;
+
+@stylex;
+
+@layer reset {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+}

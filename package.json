@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vp run tailwind-stylex#build",
+    "build": "vp run tailwind-stylex#build && vp run demo#build",
     "changeset": "nr build && changeset",
     "check": "vp check",
     "format": "vp fmt",
