@@ -64,7 +64,7 @@ const styles = stylex.create({
 | Category   | Exports                                                                                    |
 | ---------- | ------------------------------------------------------------------------------------------ |
 | Colors     | `colors`                                                                                   |
-| Layout     | `spacing`, `breakpoints`, `containers`, `aspectRatios`, `maxWidths`                        |
+| Layout     | `spacing`, `breakpoints`, `mediaQueries`, `containers`, `aspectRatios`, `maxWidths`        |
 | Typography | `fonts`, `fontSizes`, `fontSizeLineHeights`, `fontWeights`, `letterSpacing`, `lineHeights` |
 | Surfaces   | `radii`, `shadows`, `insetShadows`, `dropShadows`, `textShadows`, `blurs`                  |
 | Motion     | `easings`, `animations`, `perspectives`                                                    |

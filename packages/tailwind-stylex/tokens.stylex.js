@@ -31,6 +31,9 @@ const bounce = stylex.keyframes({
 });
 
 export const colors = stylex.defineConsts({
+  "inherit": "inherit",
+  "current": "currentcolor",
+  "transparent": "transparent",
   "red50": "oklch(97.1% .013 17.38)",
   "red100": "oklch(93.6% .032 17.717)",
   "red200": "oklch(88.5% .062 18.334)",
@@ -325,7 +328,7 @@ export const spacing = stylex.defineConsts({
   "unit": ".25rem",
   "0": "0px",
   "0.5": "calc(.25rem * 0.5)",
-  "1": "calc(.25rem * 1)",
+  "1": ".25rem",
   "1.5": "calc(.25rem * 1.5)",
   "2": "calc(.25rem * 2)",
   "2.5": "calc(.25rem * 2.5)",
@@ -366,6 +369,14 @@ export const breakpoints = stylex.defineConsts({
   "lg": "64rem",
   "xl": "80rem",
   "2xl": "96rem",
+});
+
+export const mediaQueries = stylex.defineConsts({
+  "sm": "@media (min-width: 40rem)",
+  "md": "@media (min-width: 48rem)",
+  "lg": "@media (min-width: 64rem)",
+  "xl": "@media (min-width: 80rem)",
+  "2xl": "@media (min-width: 96rem)",
 });
 
 export const containers = stylex.defineConsts({
@@ -452,6 +463,7 @@ export const lineHeights = stylex.defineConsts({
 });
 
 export const radii = stylex.defineConsts({
+  "full": "calc(infinity * 1px)",
   "xs": ".125rem",
   "sm": ".25rem",
   "md": ".375rem",

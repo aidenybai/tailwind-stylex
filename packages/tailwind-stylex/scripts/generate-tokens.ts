@@ -4,8 +4,9 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { transform } from "lightningcss";
 import postcss from "postcss";
+import { __unstable__loadDesignSystem, compile } from "tailwindcss";
 
-import { TAILWIND_SPACING_SCALE } from "./constants.js";
+import { STATIC_TOKEN_CANDIDATES } from "./constants.js";
 import { resolveTailwindValue } from "./lib/resolve-tailwind-value.js";
 import { toStyleXProperty } from "./lib/to-stylex-property.js";
 import { toTokenKey } from "./lib/to-token-key.js";
@@ -43,6 +44,7 @@ const tokenGroupOrder = [
   "colors",
   "spacing",
   "breakpoints",
+  "mediaQueries",
   "containers",
   "fonts",
   "fontSizes",
@@ -121,27 +123,58 @@ const getTokenGroup = (cssVariable: string) => {
   throw new Error(`Unsupported Tailwind theme namespace: ${cssVariable}`);
 };
 
-const getSpacingTokens = (unit: string) => {
-  const tokens: GeneratedToken[] = [
-    { key: "unit", value: unit },
-    { key: "0", value: "0px" },
-    ...TAILWIND_SPACING_SCALE.slice(1).map((multiplier) => ({
-      key: multiplier,
-      value: `calc(${unit} * ${multiplier})`,
-    })),
-    { key: "px", value: "1px" },
-  ];
-  return { exportName: "spacing", tokens };
-};
-
-const getThemeTokenGroups = (variables: Map<string, string>) => {
+const getCompiledTokenGroups = async (source: string, variables: Map<string, string>) => {
+  const tailwindSource = `${source}\n@tailwind utilities;`;
+  const designSystem = await __unstable__loadDesignSystem(tailwindSource);
+  const spacingCandidates: CompiledTokenCandidate[] = designSystem
+    .getClassList()
+    .map(([candidate]) => candidate)
+    .filter((candidate) => /^p-(?:px|\d+(?:\.\d+)?)$/.test(candidate))
+    .map((candidate) => ({
+      candidate,
+      exportName: "spacing",
+      key: candidate.slice(2),
+      property: "padding",
+    }));
+  const candidates = [...STATIC_TOKEN_CANDIDATES, ...spacingCandidates];
+  const compiler = await compile(tailwindSource);
+  const compiledRoot = postcss.parse(compiler.build(candidates.map(({ candidate }) => candidate)));
   const groupsByName = new Map<string, GeneratedTokenGroup>();
 
+  for (const tokenCandidate of candidates) {
+    const escapedSelector = `.${tokenCandidate.candidate.replaceAll(".", "\\.")}`;
+    let rawValue: string | undefined;
+    compiledRoot.walkRules(escapedSelector, (rule) => {
+      rule.walkDecls(tokenCandidate.property, (declaration) => {
+        rawValue = declaration.value;
+      });
+    });
+    if (rawValue === undefined)
+      throw new Error(`Tailwind did not compile ${tokenCandidate.candidate}.`);
+    const value = resolveTailwindValue(rawValue, variables);
+    if (value === undefined) throw new Error(`Could not resolve ${tokenCandidate.candidate}.`);
+    const group = groupsByName.get(tokenCandidate.exportName) ?? {
+      exportName: tokenCandidate.exportName,
+      tokens: [],
+    };
+    group.tokens.push({ key: tokenCandidate.key, value });
+    groupsByName.set(tokenCandidate.exportName, group);
+  }
+
+  const spacingGroup = groupsByName.get("spacing");
+  const spacingUnit = variables.get("--spacing");
+  if (spacingGroup === undefined || spacingUnit === undefined) {
+    throw new Error("Tailwind did not define spacing.");
+  }
+  spacingGroup.tokens.unshift({ key: "unit", value: spacingUnit });
+  return groupsByName;
+};
+
+const getThemeTokenGroups = async (source: string, variables: Map<string, string>) => {
+  const groupsByName = await getCompiledTokenGroups(source, variables);
+
   for (const [cssVariable, rawValue] of variables) {
-    if (cssVariable === "--spacing") {
-      groupsByName.set("spacing", getSpacingTokens(rawValue));
-      continue;
-    }
+    if (cssVariable === "--spacing") continue;
     const { exportName, keySource } = getTokenGroup(cssVariable);
     const value = resolveTailwindValue(rawValue, variables);
     if (value === undefined) throw new Error(`Could not resolve ${cssVariable}.`);
@@ -149,6 +182,16 @@ const getThemeTokenGroups = (variables: Map<string, string>) => {
     group.tokens.push({ key: toTokenKey(keySource), value });
     groupsByName.set(exportName, group);
   }
+
+  const breakpoints = groupsByName.get("breakpoints");
+  if (breakpoints === undefined) throw new Error("Tailwind did not define breakpoints.");
+  groupsByName.set("mediaQueries", {
+    exportName: "mediaQueries",
+    tokens: breakpoints.tokens.map((token) => ({
+      key: token.key,
+      value: `@media (min-width: ${token.value})`,
+    })),
+  });
 
   return tokenGroupOrder.map((groupName) => {
     const group = groupsByName.get(groupName);
@@ -214,7 +257,7 @@ export const generateTokens = async (
 ): Promise<GenerateTokensResult> => {
   const tailwindTheme = await readFile(tailwindThemePath, "utf8");
   const { keyframes, variables } = parseTailwindTheme(tailwindTheme);
-  const groups = getThemeTokenGroups(variables);
+  const groups = await getThemeTokenGroups(tailwindTheme, variables);
   const javascript = renderJavascript(groups, keyframes);
   const types = renderTypes(groups);
   const [existingJavascript, existingTypes] = await Promise.all([

@@ -1,3 +1,10 @@
+interface CompiledTokenCandidate {
+  candidate: string;
+  exportName: string;
+  key: string;
+  property: string;
+}
+
 interface GeneratedToken {
   key: string;
   value: string;

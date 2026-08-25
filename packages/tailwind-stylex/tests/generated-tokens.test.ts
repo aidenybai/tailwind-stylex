@@ -50,12 +50,16 @@ describe("generated tokens", () => {
   it("resolves package tokens in StyleX styles", async () => {
     const source = `
       import * as stylex from "@stylexjs/stylex";
-      import { animations, colors, spacing } from "../tokens.stylex";
+      import { animations, colors, mediaQueries, radii, spacing } from "../tokens.stylex";
 
       export const styles = stylex.create({
         root: {
           animation: animations.spin,
-          color: colors.stone900,
+          borderRadius: radii.full,
+          color: {
+            default: colors.stone900,
+            [mediaQueries.md]: colors.current,
+          },
           padding: spacing[4],
         },
       });

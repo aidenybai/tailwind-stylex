@@ -1,4 +1,7 @@
 export declare const colors: Readonly<{
+  readonly "inherit": "inherit";
+  readonly "current": "currentcolor";
+  readonly "transparent": "transparent";
   readonly "red50": "oklch(97.1% .013 17.38)";
   readonly "red100": "oklch(93.6% .032 17.717)";
   readonly "red200": "oklch(88.5% .062 18.334)";
@@ -293,7 +296,7 @@ export declare const spacing: Readonly<{
   readonly "unit": ".25rem";
   readonly "0": "0px";
   readonly "0.5": "calc(.25rem * 0.5)";
-  readonly "1": "calc(.25rem * 1)";
+  readonly "1": ".25rem";
   readonly "1.5": "calc(.25rem * 1.5)";
   readonly "2": "calc(.25rem * 2)";
   readonly "2.5": "calc(.25rem * 2.5)";
@@ -334,6 +337,14 @@ export declare const breakpoints: Readonly<{
   readonly "lg": "64rem";
   readonly "xl": "80rem";
   readonly "2xl": "96rem";
+}>;
+
+export declare const mediaQueries: Readonly<{
+  readonly "sm": "@media (min-width: 40rem)";
+  readonly "md": "@media (min-width: 48rem)";
+  readonly "lg": "@media (min-width: 64rem)";
+  readonly "xl": "@media (min-width: 80rem)";
+  readonly "2xl": "@media (min-width: 96rem)";
 }>;
 
 export declare const containers: Readonly<{
@@ -420,6 +431,7 @@ export declare const lineHeights: Readonly<{
 }>;
 
 export declare const radii: Readonly<{
+  readonly "full": "calc(infinity * 1px)";
   readonly "xs": ".125rem";
   readonly "sm": ".25rem";
   readonly "md": ".375rem";
