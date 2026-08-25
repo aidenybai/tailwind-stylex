@@ -8,11 +8,34 @@ Use Tailwind’s default design tokens directly in StyleX. Get typed, autocomple
 pnpm add tailwind-stylex @stylexjs/stylex
 ```
 
+Configure your StyleX compiler to process `tailwind-stylex`. Skip this step if your integration already processes direct dependencies.
+
+With `@stylexjs/unplugin`:
+
+```typescript
+stylex({
+  externalPackages: ["tailwind-stylex"],
+});
+```
+
+With `@stylexjs/postcss-plugin`, add the token module when you set a custom `include` list:
+
+```javascript
+{
+  include: [
+    "src/**/*.{js,jsx,ts,tsx}",
+    "node_modules/tailwind-stylex/tokens.stylex.js",
+  ],
+}
+```
+
 ## Use
+
+Import the tokens you need and use them in `stylex.create`:
 
 ```tsx
 import * as stylex from "@stylexjs/stylex";
-import { colors, radii, spacing } from "tailwind-stylex/tokens.stylex";
+import { colors, containers, fontSizes, radii, spacing } from "tailwind-stylex/tokens.stylex";
 
 const styles = stylex.create({
   card: {
@@ -24,63 +47,42 @@ const styles = stylex.create({
 });
 ```
 
-The package exports:
+Use bracket notation for numeric Tailwind names:
 
-- `colors`
-- `spacing`
-- `breakpoints`
-- `containers`
-- `fonts`
-- `fontSizes`
-- `fontSizeLineHeights`
-- `fontWeights`
-- `letterSpacing`
-- `lineHeights`
-- `radii`
-- `shadows`
-- `insetShadows`
-- `dropShadows`
-- `textShadows`
-- `easings`
-- `animations`
-- `blurs`
-- `perspectives`
-- `aspectRatios`
-- `defaults`
-- `maxWidths`
-
-Token names follow Tailwind. Numeric names use bracket notation, such as `spacing[4]`, `breakpoints["2xl"]`, and `fontSizes["2xl"]`.
-
-## StyleX Setup
-
-Your StyleX compiler must process `tailwind-stylex` as a direct StyleX dependency. With `@stylexjs/unplugin`, add it to `externalPackages`:
-
-```typescript
-stylex({
-  externalPackages: ["tailwind-stylex"],
+```tsx
+const styles = stylex.create({
+  hero: {
+    fontSize: fontSizes["2xl"],
+    maxWidth: containers["7xl"],
+    padding: spacing[8],
+  },
 });
 ```
 
-`@stylexjs/postcss-plugin` discovers direct StyleX dependencies automatically. If you set a custom `include` list, include the generated module:
+## Available Tokens
 
-```javascript
-{
-  include: [
-    "src/**/*.{js,jsx,ts,tsx}",
-    "node_modules/tailwind-stylex/tokens.stylex.js",
-  ],
-}
-```
+| Category   | Exports                                                                                    |
+| ---------- | ------------------------------------------------------------------------------------------ |
+| Colors     | `colors`                                                                                   |
+| Layout     | `spacing`, `breakpoints`, `containers`, `aspectRatios`, `maxWidths`                        |
+| Typography | `fonts`, `fontSizes`, `fontSizeLineHeights`, `fontWeights`, `letterSpacing`, `lineHeights` |
+| Surfaces   | `radii`, `shadows`, `insetShadows`, `dropShadows`, `textShadows`, `blurs`                  |
+| Motion     | `easings`, `animations`, `perspectives`                                                    |
+| Defaults   | `defaults`                                                                                 |
 
-## Updating Tailwind
+Your editor autocompletes every token and shows its exact value.
 
-Only package maintainers run:
+## Update Tailwind
+
+Update Tailwind and regenerate the published tokens:
 
 ```shell
+cd packages/tailwind-stylex
+ni -D tailwindcss@latest
 nr generate
 ```
 
-CI runs `nr build` to verify that the committed tokens match the installed Tailwind version.
+Commit the generated token files with the Tailwind update. CI verifies that they stay in sync.
 
 ## License
 
