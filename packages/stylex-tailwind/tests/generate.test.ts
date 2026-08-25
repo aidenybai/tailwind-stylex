@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { generate } from "../src/generate.js";
 
 const temporaryDirectories: string[] = [];
-const fixturesDirectory = path.join(import.meta.dirname, "fixtures");
+const fixturesDirectory = import.meta.dirname;
 
 const createProject = async (source: string) => {
   const projectRoot = await mkdtemp(path.join(fixturesDirectory, "project-"));

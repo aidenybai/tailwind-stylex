@@ -5,7 +5,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { loadConfig } from "../src/lib/load-config.js";
 
 const temporaryDirectories: string[] = [];
-const fixturesDirectory = path.join(import.meta.dirname, "fixtures");
+const fixturesDirectory = import.meta.dirname;
 
 afterEach(async () => {
   await Promise.all(

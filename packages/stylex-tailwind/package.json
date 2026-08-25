@@ -59,7 +59,7 @@
     "dev": "NODE_ENV=development vp pack --watch",
     "prepack": "cp ../../README.md ../../LICENSE .",
     "prepublishOnly": "nr build",
-    "publint": "publint",
+    "publint": "nr build && publint",
     "test": "vp test"
   },
   "dependencies": {
