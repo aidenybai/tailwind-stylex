@@ -1,8 +1,6 @@
 # tailwind-stylex
 
-Tailwind CSS design tokens for StyleX, generated directly from Tailwind’s default theme.
-
-`tailwind-stylex` parses the installed `tailwindcss/theme.css` with Lightning CSS once when this package updates. It publishes the resulting static StyleX constants. Your app does not need a package-specific config file, scanner, Tailwind compiler, or generation step.
+Use Tailwind’s default design tokens directly in StyleX. Get typed, autocomplete-friendly constants with no package-specific config, scanning, or generation.
 
 ## Install
 
