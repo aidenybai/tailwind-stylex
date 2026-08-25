@@ -1,15 +1,15 @@
 {
-  "name": "@aidenybai/stylex-tailwind-monorepo",
+  "name": "stylex-tailwind-monorepo",
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vp run @aidenybai/stylex-tailwind#build",
+    "build": "vp run stylex-tailwind#build",
     "changeset": "nr build && changeset",
     "check": "vp check",
-    "dev": "vp run @aidenybai/stylex-tailwind#dev",
+    "dev": "vp run stylex-tailwind#dev",
     "format": "vp fmt",
     "lint": "vp lint",
-    "publint": "vp run @aidenybai/stylex-tailwind#publint",
+    "publint": "vp run stylex-tailwind#publint",
     "release": "changeset publish",
     "test": "vp test",
     "version": "changeset version"

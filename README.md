@@ -7,7 +7,7 @@ A compile-time bridge from Tailwind CSS to StyleX.
 ## Install
 
 ```shell
-pnpm add -D @aidenybai/stylex-tailwind tailwindcss
+pnpm add -D stylex-tailwind tailwindcss
 pnpm add @stylexjs/stylex
 ```
 
@@ -16,7 +16,7 @@ pnpm add @stylexjs/stylex
 Create `stylex-tailwind.config.ts`:
 
 ```typescript
-import { defineConfig } from "@aidenybai/stylex-tailwind";
+import { defineConfig } from "stylex-tailwind";
 
 export default defineConfig({
   content: ["src/**/*.{ts,tsx}"],

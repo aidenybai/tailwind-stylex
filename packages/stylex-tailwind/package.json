@@ -1,5 +1,5 @@
 {
-  "name": "@aidenybai/stylex-tailwind",
+  "name": "stylex-tailwind",
   "version": "0.0.0",
   "description": "Compile Tailwind CSS design tokens and utilities to StyleX",
   "keywords": [
